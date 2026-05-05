@@ -1,0 +1,29 @@
+name: angelCreate
+version: '1.0-SNAPSHOT'
+main: me.angelique.angelCreate.AngelCreate
+api-version: '1.21'
+authors: [ angelique ]
+description: Company, product manufacturing, and patent economy plugin.
+softdepend: [ Vault, angelTrade ]
+
+commands:
+  company:
+    description: Company management
+    usage: /company <subcommand>
+  product:
+    description: Product management
+    usage: /product <subcommand>
+  patent:
+    description: Patent management
+    usage: /patent <subcommand>
+  ceadmin:
+    description: Admin commands
+    usage: /ceadmin <subcommand>
+
+permissions:
+  createecon.company.create:
+    description: Register a new company
+    default: true
+  createecon.admin:
+    description: Admin access
+    default: op

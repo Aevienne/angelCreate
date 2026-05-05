@@ -1,0 +1,26 @@
+economy:
+  company-create-cost: 1000.0
+  ipo-cost: 5000.0
+  patent-cost: 500.0
+  patent-duration-days: 7
+  currency-symbol: '$'
+
+product-limits:
+  max-effects: 5
+  max-amplifier: 3
+  max-duration-ticks: 2400
+  max-ingredients: 9
+  allow-command-effect: false
+
+workbench:
+  block-type: CARTOGRAPHY_TABLE
+
+messages:
+  prefix: '&8[&6angelCreate&8] &r'
+  no-company: '&cYou are not part of a company.'
+  not-member: '&cYou do not have access to this workbench.'
+  patent-blocked: '&cThis product is patented by {company}. Expires: {date}.'
+  insufficient-funds: '&cYour company treasury does not have enough funds.'
+  no-vault: '&cVault is required for this action. Please install Vault.'
+  company-create-success: '&aCompany &6{name} &aregistered! Cost: &e${cost}'
+  ipo-success: '&aCompany &6{name} &ais now publicly listed!'
