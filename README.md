@@ -1,8 +1,6 @@
-# angelTrade
+# angelCreate
 
-A Paper 1.21.1 Minecraft plugin implementing two interconnected economy systems —
-**Trade Routes** and **Trade Shops (Caravans)** — designed to complement a supply/demand
-shop economy and company system.
+A Minecraft 1.21.1 Paper plugin that enables **player-run companies** to design and patent **custom products** with modular effect modules, craft them via a workbench system, and sell finished goods.
 
 ---
 
@@ -15,7 +13,6 @@ shop economy and company system.
 | Build Tool | Gradle 8.x |
 | API Version | 1.21 |
 | Vault | Any current release |
-| angelTrade | Optional (soft-depend) |
 
 ---
 
@@ -25,228 +22,70 @@ shop economy and company system.
 ./gradlew jar
 ```
 
-Output: `build/libs/angelTrade-1.0.0.jar`
+Output: `build/libs/angelCreate-1.0.0.jar`
 
 Drop the jar into your server's `plugins/` folder and restart.
 
 ---
 
+## Features
+
+- **Company management** — Create and manage companies with role-based member tiers
+- **Product design** — Create custom products with configurable base materials
+- **Modular effects** — Add up to 5 effect modules per product (passive, on-hit, on-wear)
+- **Workbench GUI** — Craft and finalize products through an inventory-based interface
+- **Patent system** — Lock down product designs with time-limited patents
+- **Patent expiry** — Automatic purge of expired patents every 5 minutes
+- **Caravan integration** — Hook to angelTrade for product sales
+- **YAML persistence** — Companies, products, and patents saved across restarts
+- **Vault economy** — Cost-based company creation and patent registration
+
+---
+
 ## Commands
 
-### /route
+### /company
 
-| Subcommand | Description | Permission |
-|---|---|---|
-| `create` | Begin route creation (hold a Route Deed, right-click two Waystones) | `angeltrade.route.create` |
-| `list` | List your trade routes | `angeltrade.route.list` |
-| `info <id>` | View route details and current tier | `angeltrade.route.info` |
-| `insure <id>` | Insure a route against decay (costs from personal balance) | `angeltrade.route.insure` |
-| `remove <id>` | Remove a route you own | `angeltrade.route.remove` |
-
-### /tradeshop
-
-| Subcommand | Description | Permission |
-|---|---|---|
-| `place` | Receive a Trade Shop block | `angeltrade.tradeshop.use` |
-| `relocate <id>` | Relocate your shop (cooldown applies) | `angeltrade.tradeshop.use` |
-| `additem <id> <material> <price>` | Add an item listing to your shop | `angeltrade.tradeshop.use` |
-| `removeitem <id> <material>` | Remove an item listing | `angeltrade.tradeshop.use` |
-| `setprice <id> <material> <price>` | Update an item's price | `angeltrade.tradeshop.use` |
-| `info <id>` | View shop details and linked route | `angeltrade.tradeshop.use` |
-| `give_waystone` | Give yourself a Waystone *(admin only)* | `angeltrade.admin` |
-| `give_deed` | Give yourself a Route Deed *(admin only)* | `angeltrade.admin` |
-
-All permissions default to `true` (all players). `angeltrade.admin` defaults to `op`.
-
----
-
-## How It Works
-
-### 1. Trade Routes
-
-```
-Craft a Waystone → place at Location A
-    └── Hold a Route Deed → right-click Waystone A
-        └── Right-click Waystone B
-            └── Route registered if within max distance (default 1000 blocks)
-```
-
-Routes gain tiers as they are used:
-
-| Tier | Uses | Value Bonus |
-|---|---|---|
-| Dirt Road | 0–20 | +5% item value |
-| Stone Road | 21–60 | +12% item value |
-| Gold Road | 61–150 | +20% + passive income |
-| Royal Road | 151+ | +30% + passive income |
-
-### 2. Route Decay
-
-Routes that go unused degrade automatically via a daily background task:
-
-| Days Unused | Result |
+| Command | Description |
 |---|---|
-| 7 | Warning notification sent to owner |
-| 14 | INACTIVE — no bonuses applied |
-| 21 | BROKEN — route deleted |
+| `/company create <name>` | Create a new company |
+| `/company list` | List all companies on the server |
+| `/company info [company]` | View company details and members |
+| `/company join <company>` | Request to join a company |
+| `/company leave` | Leave your current company |
+| `/company invite <player>` | Invite a player (MANAGER+) |
+| `/company kick <player>` | Remove a member (MANAGER+) |
+| `/company promote <player> <role>` | Change member role (OWNER) |
+| `/company disband` | Disband your company (OWNER only) |
 
-Broken routes have a **3-day grace period** — replace the Waystone at the same location
-to fully restore the route and its tier progress.
+### /product
 
-Insured routes pay out from their insurance pool to the owner on sabotage or inactivity.
-
-### 3. Sabotage
-
-If a player who is **not** the route owner destroys a Waystone:
-- The saboteur is logged in the database and flagged with a visible **Saboteur** tag
-- The owner is notified with the saboteur's name
-- Insured routes receive a partial payout automatically
-
-### 4. Trade Shops
-
-```
-/tradeshop place → receive a Trade Shop (Chest) block
-    └── Place it in the marketplace
-        └── Right-click to open the shop GUI
-            └── Players see company price vs server price side by side
-```
-
-Shops linked to an active route receive a **passive income bonus** on every sale.
-Higher route tier = higher bonus percentage.
-
-### 5. Crafting Recipes
-
-All custom items are craftable in a standard crafting table:
-
-**Waystone**
-```
-G G G
-G L G    G = Gold Ingot, L = Lodestone
-G G G
-```
-
-**Route Deed**
-```
-_ F _
-_ P _    F = Feather, P = Paper, I = Ink Sac
-_ I _
-```
-
-**Trade Shop Block**
-```
-_ G _
-E C E    G = Gold Block, E = Emerald, C = Chest
-_ E _
-```
-
----
-
-## Configuration
-
-**`plugins/angelTrade/config.yml`**
-
-```yaml
-max-route-distance: 1000
-
-decay:
-  warn-days: 7
-  inactive-days: 14
-  broken-days: 21
-
-revival-grace-days: 3
-
-tiers:
-  dirt-road-max: 20
-  stone-road-max: 60
-  gold-road-max: 150
-
-upkeep:
-  dirt-road: 5.0
-  stone-road: 10.0
-  gold-road: 20.0
-  royal-road: 40.0
-
-insurance-pool-fraction: 0.25
-
-tradeshop-relocate-cooldown: 300
-
-route-bonus:
-  dirt-road: 0.05
-  stone-road: 0.12
-  gold-road: 0.20
-  royal-road: 0.30
-
-route-passive-income:
-  dirt-road: 0.02
-  stone-road: 0.05
-  gold-road: 0.10
-  royal-road: 0.15
-
-currency-symbol: '$'
-```
-
-All `&` color codes are supported in the `messages:` section.
-
----
-
-## ⚠️ WIP Integration Notices
-
-### angelEconomy (Server /shop price display)
-The Trade Shop GUI is designed to show the server `/shop` price alongside company prices
-for direct comparison. This is currently stubbed in `TradeShopGUI.java`:
-
-```java
-// Stub: replace with actual server shop price lookup
-lore.add("§7Server Price:  §f$?.?? §8(angelEconomy — WIP)");
-```
-
-Replace with your angelEconomy price-lookup API call when available.
-
-### angelCompany (Company ownership & ledger)
-Routes and Shops store `companyId` as a plain String. Once angelCompany is available,
-replace with proper company API calls. Search for `// STUB: angelCompany` in the source
-to find all integration points.
-
----
-
-## Data Storage
-
-SQLite — stored at `plugins/angelTrade/angeltrade.db` with WAL mode enabled.
-
-| Table | Purpose |
+| Command | Description |
 |---|---|
-| `trade_routes` | All route data including tier, status, insurance |
-| `trade_shops` | All shop data including location and linked route |
-| `shop_items` | Per-shop item listings with price, stock, discount |
-| `saboteurs` | Sabotage log per player UUID with offense count |
+| `/product create <name>` | Create a new product (MANAGER+) |
+| `/product list` | List your company's products |
+| `/product info <product>` | View product details and effects |
+| `/product setbase <product> <material>` | Set the base item (MANAGER+) |
+| `/product addeffect <product> <effect>` | Add an effect module (MANAGER+) |
+| `/product removeeffect <product> <slot>` | Remove an effect (MANAGER+) |
+| `/product finalize <product>` | Lock the product design (MANAGER+) |
+| `/product workbench <product>` | Open the crafting workbench |
 
----
+### /patent
 
-## Project Structure
+| Command | Description |
+|---|---|
+| `/patent create <product> <days>` | Patent a product design (MANAGER+) |
+| `/patent list` | List your company's active patents |
+| `/patent info <patent>` | View patent details and expiry |
+| `/patent check <product>` | Check if a product is patented |
 
-```
-src/main/java/me/angelique/angelTrade/
-├── AngelTrade.java                      # Main plugin class
-├── commands/
-│   ├── RouteCommand.java                # /route
-│   └── TradeShopCommand.java           # /tradeshop
-├── gui/
-│   └── TradeShopGUI.java               # Chest GUI with company + server price
-├── listeners/
-│   ├── WaystoneListener.java           # Waystone place/break + Route Deed flow
-│   └── TradeShopListener.java          # Shop right-click, block-break protection
-├── managers/
-│   ├── BonusManager.java               # Route value bonus + passive income
-│   ├── RecipeManager.java              # Crafting recipe registration
-│   ├── RouteManager.java               # Route lifecycle, decay, saboteur handling
-│   └── TradeShopManager.java          # Shop CRUD, relocate, item management
-├── models/
-│   ├── ShopItem.java
-│   ├── TradeRoute.java
-│   └── TradeShop.java
-└── data/
-    └── DataManager.java                # SQLite with WAL, auto-reconnect
-```
+### /ceadmin
+
+| Command | Description |
+|---|---|
+| `/ceadmin reload` | Reload all configs and data |
+| `/ceadmin purgepatents` | Force purge all expired patents |
 
 ---
 
@@ -254,18 +93,164 @@ src/main/java/me/angelique/angelTrade/
 
 | Permission | Default | Description |
 |---|---|---|
-| `angeltrade.route.create` | true | Create trade routes |
-| `angeltrade.route.list` | true | List your routes |
-| `angeltrade.route.info` | true | View route info |
-| `angeltrade.route.insure` | true | Insure routes |
-| `angeltrade.route.remove` | true | Remove routes |
-| `angeltrade.tradeshop.use` | true | Use trade shop commands |
-| `angeltrade.admin` | op | Admin override for all actions |
+| `createecon.company.create` | true | Create companies |
+| `createecon.company.list` | true | List companies |
+| `createecon.company.info` | true | View company info |
+| `createecon.company.join` | true | Join companies |
+| `createecon.company.leave` | true | Leave company |
+| `createecon.company.invite` | false | Invite players (MANAGER+) |
+| `createecon.company.kick` | false | Kick members (MANAGER+) |
+| `createecon.company.promote` | false | Promote members (OWNER) |
+| `createecon.company.disband` | false | Disband company (OWNER) |
+| `createecon.product.create` | false | Create products (MANAGER+) |
+| `createecon.product.list` | true | List products |
+| `createecon.product.info` | true | View product info |
+| `createecon.product.setbase` | false | Set base material (MANAGER+) |
+| `createecon.product.addeffect` | false | Add effects (MANAGER+) |
+| `createecon.product.removeeffect` | false | Remove effects (MANAGER+) |
+| `createecon.product.finalize` | false | Finalize product (MANAGER+) |
+| `createecon.product.workbench` | true | Use workbench |
+| `createecon.patent.create` | false | Create patents (MANAGER+) |
+| `createecon.patent.list` | true | List patents |
+| `createecon.patent.info` | true | View patent info |
+| `createecon.patent.check` | true | Check patents |
+| `createecon.admin` | op | Admin commands |
+
+---
+
+## How It Works
+
+### 1. Company Creation
+
+Create a company with `/company create <name>`. This deducts a creation cost from your balance (via Vault). You become the OWNER and can now create products and manage members.
+
+**Company Roles:**
+- **OWNER** — Full control; can disband company and promote members
+- **MANAGER** — Create/edit products, invite members, patent designs
+- **MEMBER** — View company info and use workbenches
+
+### 2. Product Design
+
+Create a product with `/product create <name>`, then configure it:
+
+1. Set a base material with `/product setbase <product> <material>`
+2. Add effect modules with `/product addeffect <product> <effect>` (up to 5)
+3. Finalize the design with `/product finalize <product>`
+
+Each effect has a Type (PASSIVE, ON_HIT, ON_WEAR) and a Trigger that determines when it activates.
+
+### 3. Workbench Crafting
+
+Open `/product workbench <product>` to access the crafting interface. Combine ingredients to craft the product and receive a finished custom item with stored effects.
+
+### 4. Patent Protection
+
+Patent a product design with `/patent create <product> <days>` to lock it down and prevent other companies from copying it. Patents automatically expire and are purged every 5 minutes.
+
+Patenting costs economy funds — use this to establish market exclusivity.
+
+### 5. Caravan Sales
+
+Finished products are sold through **angelTrade's Trade Shops**. Link a shop to a trade route and list your products at your set prices.
+
+---
+
+## Configuration
+
+**`plugins/angelCreate/config.yml`**
+
+```yaml
+economy:
+  company-create-cost: 1000.0
+  product-create-cost: 100.0
+  patent-create-cost-per-day: 10.0
+
+product-limits:
+  max-effects: 5
+
+patent:
+  default-duration-days: 30
+  purge-interval-ticks: 6000
+
+messages:
+  prefix: "&6[angelCreate] &r"
+  insufficient-funds: "&cYou do not have enough funds."
+  company-create-success: "&aCompany created: &6{company}"
+  product-created: "&aProduct created: &6{product}"
+```
+
+**`plugins/angelCreate/effects.yml`**
+
+Define custom effect types and their behavior:
+
+```yaml
+effects:
+  MobAura:
+    type: PASSIVE
+    trigger: ALWAYS
+    color: FF5500
+    description: "Damages nearby mobs"
+  
+  LifeSteal:
+    type: ON_HIT
+    trigger: MELEE_HIT
+    color: AA0000
+    description: "Heal on successful hit"
+```
+
+---
+
+## Data Storage
+
+YAML files stored in `plugins/angelCreate/data/`:
+
+| File | Purpose |
+|---|---|
+| `companies.yml` | Company data and member rosters |
+| `products.yml` | Product definitions and effects |
+| `patents.yml` | Active patents with expiry dates |
+
+---
+
+## Project Structure
+
+```
+src/main/java/me/angelique/angelCreate/
+├── AngelCreate.java                    # Main plugin class
+├── commands/
+│   ├── CompanyCommand.java            # /company
+│   ├── ProductCommand.java            # /product
+│   ├── PatentCommand.java             # /patent
+│   └── AdminCommand.java              # /ceadmin
+├── gui/
+│   ├── WorkbenchGUI.java              # Crafting interface
+│   └── ProductSelectGUI.java          # Product selection
+├── listeners/
+│   ├── WorkbenchListener.java         # Workbench interactions
+│   ├── ItemInteractListener.java      # Product item usage
+│   └── EffectTriggerListener.java     # Effect activation
+├── managers/
+│   ├── CompanyManager.java            # Company CRUD
+│   ├── ProductManager.java            # Product lifecycle
+│   ├── PatentManager.java             # Patent handling
+│   └── EffectManager.java             # Effect registration
+├── models/
+│   ├── Company.java
+│   ├── Product.java
+│   ├── Patent.java
+│   ├── EffectModule.java
+│   └── enums/
+│       ├── Role.java
+│       ├── EffectType.java
+│       └── Trigger.java
+└── hooks/
+    └── CaravanHook.java               # angelTrade integration
+```
 
 ---
 
 ## Main Class
 
 ```
-me.angelique.angelTrade.AngelTrade
+me.angelique.angelCreate.AngelCreate
 ```
