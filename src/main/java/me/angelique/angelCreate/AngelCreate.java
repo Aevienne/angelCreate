@@ -3,8 +3,11 @@ package me.angelique.angelCreate;
 
 import me.angelique.angelCreate.commands.AdminCommand;
 import me.angelique.angelCreate.commands.CompanyCommand;
+import me.angelique.angelCreate.commands.FactoryCommand;
 import me.angelique.angelCreate.commands.PatentCommand;
 import me.angelique.angelCreate.commands.ProductCommand;
+import me.angelique.angelCreate.factory.FactoryListener;
+import me.angelique.angelCreate.factory.FactoryManager;
 import me.angelique.angelCreate.gui.ProductSelectGUI;
 import me.angelique.angelCreate.gui.WorkbenchGUI;
 import me.angelique.angelCreate.hooks.CaravanHook;
@@ -35,6 +38,7 @@ public class AngelCreate extends JavaPlugin implements Listener {
     private PatentManager patentManager;
     private EffectManager effectManager;
     private CaravanHook caravanHook;
+    private FactoryManager factoryManager;
     private YamlConfiguration effectsConfig;
 
     @Override
@@ -54,6 +58,10 @@ public class AngelCreate extends JavaPlugin implements Listener {
         effectManager  = new EffectManager(this);
         caravanHook    = new CaravanHook(this);
 
+        factoryManager = new FactoryManager(this);
+        factoryManager.loadRecipes();
+        factoryManager.loadFactories();
+
         companyManager.load();
         productManager.load();
         patentManager.load();
@@ -65,6 +73,7 @@ public class AngelCreate extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new WorkbenchListener(this), this);
         getServer().getPluginManager().registerEvents(new EffectTriggerListener(this), this);
         getServer().getPluginManager().registerEvents(new ItemInteractListener(this), this);
+        getServer().getPluginManager().registerEvents(new FactoryListener(this), this);
         getServer().getPluginManager().registerEvents(this, this);
 
         // Register commands
@@ -72,6 +81,9 @@ public class AngelCreate extends JavaPlugin implements Listener {
         getCommand("product").setExecutor(new ProductCommand(this));
         getCommand("patent").setExecutor(new PatentCommand(this));
         getCommand("ceadmin").setExecutor(new AdminCommand(this));
+        FactoryCommand factoryCmd = new FactoryCommand(this);
+        getCommand("factory").setExecutor(factoryCmd);
+        getCommand("factory").setTabCompleter(factoryCmd);
 
         // Patent expiry checker — every 5 minutes
         new BukkitRunnable() {
@@ -94,6 +106,7 @@ public class AngelCreate extends JavaPlugin implements Listener {
         if (companyManager != null) companyManager.save();
         if (productManager != null)  productManager.save();
         if (patentManager != null)   patentManager.save();
+        if (factoryManager != null)  factoryManager.saveFactories();
         getLogger().info("angelCreate disabled.");
     }
 
@@ -147,5 +160,6 @@ public class AngelCreate extends JavaPlugin implements Listener {
     public PatentManager getPatentManager() { return patentManager; }
     public EffectManager getEffectManager() { return effectManager; }
     public CaravanHook getCaravanHook() { return caravanHook; }
+    public FactoryManager getFactoryManager() { return factoryManager; }
     public YamlConfiguration getEffectsConfig() { return effectsConfig; }
 }

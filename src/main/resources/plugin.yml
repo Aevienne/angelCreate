@@ -4,7 +4,7 @@ main: me.angelique.angelCreate.AngelCreate
 api-version: '1.21'
 authors: [ angelique ]
 description: Company, product manufacturing, and patent economy plugin.
-softdepend: [ Vault, angelTrade ]
+softdepend: [ Vault, angelTrade, AngelNCore ]
 
 commands:
   company:
@@ -19,6 +19,9 @@ commands:
   ceadmin:
     description: Admin commands
     usage: /ceadmin <subcommand>
+  factory:
+    description: Factory management
+    usage: /factory <place|info|start|collect|list|remove>
 
 permissions:
   createecon.company.create:

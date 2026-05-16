@@ -1,0 +1,80 @@
+recipes:
+  steel_mill:
+    display-name: "Steel Mill"
+    block-type: BLAST_FURNACE
+    tier: 1
+    duration-seconds: 300
+    fuel-material: COAL
+    fuel-amount: 2
+    inputs:
+      - material: IRON_ORE
+        amount: 4
+      - material: COAL
+        amount: 2
+    outputs:
+      - material: IRON_INGOT
+        amount: 3
+
+  food_refinery:
+    display-name: "Food Refinery"
+    block-type: SMOKER
+    tier: 1
+    duration-seconds: 120
+    fuel-material: COAL
+    fuel-amount: 1
+    inputs:
+      - material: WHEAT
+        amount: 8
+      - material: SAND
+        amount: 1
+    outputs:
+      - material: BREAD
+        amount: 4
+
+  medicine_lab:
+    display-name: "Medicine Lab"
+    block-type: BREWING_STAND
+    tier: 2
+    duration-seconds: 600
+    fuel-material: COAL
+    fuel-amount: 1
+    inputs:
+      - material: FERN
+        amount: 6
+      - material: GLASS_BOTTLE
+        amount: 2
+    outputs:
+      - material: HONEY_BOTTLE
+        amount: 2
+      - material: EXPERIENCE_BOTTLE
+        amount: 1
+
+  fuel_refinery:
+    display-name: "Fuel Refinery"
+    block-type: FURNACE
+    tier: 1
+    duration-seconds: 480
+    fuel-material: OAK_LOG
+    fuel-amount: 4
+    inputs:
+      - material: COAL
+        amount: 6
+    outputs:
+      - material: COAL_BLOCK
+        amount: 3
+
+  greenhouse:
+    display-name: "Greenhouse"
+    block-type: COMPOSTER
+    tier: 2
+    duration-seconds: 900
+    fuel-material: COAL
+    fuel-amount: 2
+    inputs:
+      - material: WHEAT_SEEDS
+        amount: 4
+    outputs:
+      - material: WHEAT
+        amount: 6
+      - material: APPLE
+        amount: 2
