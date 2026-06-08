@@ -3,6 +3,10 @@ package me.angelique.angelCreate.commands;
 import me.angelique.angelCreate.AngelCreate;
 import me.angelique.angelCreate.models.Company;
 import me.angelique.angelCreate.models.enums.Role;
+import me.angelique.angelNCore.events.CompanyIPOEvent;
+import me.angelique.angelNCore.events.EventBus;
+import me.angelique.angelNCore.services.ServiceRegistry;
+import me.angelique.angelNCore.services.StockExchangeService;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -68,7 +72,13 @@ public class CompanyCommand implements CommandExecutor {
                 player.sendMessage(p() + plugin.getConfig().getString("messages.ipo-success",
                     "&aCompany &6{name} &ais now publicly listed!")
                     .replace("{name}", c.getName()).replace('&','\u00A7'));
-                // Stub: hook into stock exchange plugin here
+                StockExchangeService sx = ServiceRegistry.getStockExchangeService();
+                if (sx != null) {
+                    int shares = 1000 * c.getLevel();
+                    double price = Math.max(1.0, c.getTreasury() / Math.max(1, shares));
+                    sx.listCompany(c.getId().toString(), shares, price);
+                }
+                EventBus.publish(new CompanyIPOEvent(c.getId().toString(), 1000 * c.getLevel(), Math.max(1.0, c.getTreasury() / Math.max(1, 1000 * c.getLevel()))));
             }
 
             case "invite" -> {
