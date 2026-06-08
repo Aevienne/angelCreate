@@ -74,6 +74,7 @@ public class AngelCreate extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new EffectTriggerListener(this), this);
         getServer().getPluginManager().registerEvents(new ItemInteractListener(this), this);
         getServer().getPluginManager().registerEvents(new FactoryListener(this), this);
+        getServer().getPluginManager().registerEvents(caravanHook, this);
         getServer().getPluginManager().registerEvents(this, this);
 
         // Register commands
