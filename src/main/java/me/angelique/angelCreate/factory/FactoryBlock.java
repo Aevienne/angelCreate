@@ -60,7 +60,17 @@ public class FactoryBlock {
 
     /** Effective throughput: 1.0 = full, 0.5 = 50% (when health is low). */
     public double getThroughputMultiplier() {
-        if (health >= 50.0) return 1.0;
-        return health / 100.0; // Linear degradation below 50%
+        double healthMult;
+        if (health >= 50.0) healthMult = 1.0;
+        else healthMult = health / 100.0;
+        return healthMult * seasonMultiplier;
     }
+
+    private static double seasonMultiplier = 1.0;
+
+    public static void setSeasonMultiplier(double multiplier) {
+        seasonMultiplier = Math.max(0.5, Math.min(1.5, multiplier));
+    }
+
+    public static double getSeasonMultiplier() { return seasonMultiplier; }
 }

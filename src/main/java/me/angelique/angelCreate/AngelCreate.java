@@ -14,6 +14,7 @@ import me.angelique.angelCreate.hooks.CaravanHook;
 import me.angelique.angelCreate.listeners.EffectTriggerListener;
 import me.angelique.angelCreate.listeners.ItemInteractListener;
 import me.angelique.angelCreate.listeners.WorkbenchListener;
+import me.angelique.angelCreate.listeners.SeasonProductionListener;
 import me.angelique.angelCreate.managers.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -75,6 +76,9 @@ public class AngelCreate extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new ItemInteractListener(this), this);
         getServer().getPluginManager().registerEvents(new FactoryListener(this), this);
         getServer().getPluginManager().registerEvents(caravanHook, this);
+        if (getServer().getPluginManager().getPlugin("AngelNCore") != null) {
+            getServer().getPluginManager().registerEvents(new SeasonProductionListener(), this);
+        }
         getServer().getPluginManager().registerEvents(this, this);
 
         // Register commands

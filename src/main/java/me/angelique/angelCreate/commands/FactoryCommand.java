@@ -62,6 +62,7 @@ public class FactoryCommand implements CommandExecutor, TabCompleter {
                 FactoryBlock created = fm.placeFactory(player, target.getLocation(), recipeId, companyId);
                 player.sendMessage(color("&aFactory &e" + recipe.getDisplayName()
                         + " &aplaced! (ID: " + created.getId() + ")"));
+                player.sendMessage(color("&7Next: &e/factory start &7to begin production."));
             }
             case "info" -> {
                 Block target = player.getTargetBlockExact(5);
@@ -80,7 +81,8 @@ public class FactoryCommand implements CommandExecutor, TabCompleter {
                 if (factory == null) { player.sendMessage(color("&cNo factory found.")); return true; }
                 String err = fm.startProduction(factory);
                 if (err != null) player.sendMessage(color("&c" + err));
-                else player.sendMessage(color("&aProduction started!"));
+                else { player.sendMessage(color("&aProduction started!"));
+                       player.sendMessage(color("&7When done, use &e/factory collect &7to retrieve outputs. Sell via &e/shop sell &7or stock exchange.")); }
             }
             case "collect" -> {
                 Block target = player.getTargetBlockExact(5);
