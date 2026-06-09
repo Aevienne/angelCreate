@@ -163,7 +163,7 @@ public class CompanyCommand implements CommandExecutor {
                 player.sendMessage(p() + "&7IPO Listed: &e" + c.isIpoListed());
                 for (Map.Entry<UUID, Role> entry : c.getMembers().entrySet()) {
                     OfflinePlayer m = plugin.getServer().getOfflinePlayer(entry.getKey());
-                    player.sendMessage("  &7" + (m.getName() != null ? m.getName() : entry.getKey()) + " &8— &e" + entry.getValue().name());
+                    player.sendMessage(p() + "  &7" + (m.getName() != null ? m.getName() : entry.getKey()) + " &8— &e" + entry.getValue().name());
                 }
             }
 
@@ -240,15 +240,15 @@ public class CompanyCommand implements CommandExecutor {
 
     private void sendHelp(Player p) {
         p.sendMessage(p() + "&6--- Company Help ---");
-        p.sendMessage("&e/company create <name> &7- Register a company");
-        p.sendMessage("&e/company ipo &7- List company on stock exchange");
-        p.sendMessage("&e/company unipo &7- Delist from stock exchange");
-        p.sendMessage("&e/company invite <player> &7- Invite member");
-        p.sendMessage("&e/company kick <player> &7- Remove member");
-        p.sendMessage("&e/company promote/demote <player> &7- Change role");
-        p.sendMessage("&e/company info [name] &7- View company info");
-        p.sendMessage("&e/company setworkbench &7- Tag workbench block");
-        p.sendMessage("&e/company deposit/withdraw <amount> &7- Treasury");
+        p.sendMessage(p() + "&e/company create <name> &7- Register a company");
+        p.sendMessage(p() + "&e/company ipo &7- List company on stock exchange");
+        p.sendMessage(p() + "&e/company unipo &7- Delist from stock exchange");
+        p.sendMessage(p() + "&e/company invite <player> &7- Invite member");
+        p.sendMessage(p() + "&e/company kick <player> &7- Remove member");
+        p.sendMessage(p() + "&e/company promote/demote <player> &7- Change role");
+        p.sendMessage(p() + "&e/company info [name] &7- View company info");
+        p.sendMessage(p() + "&e/company setworkbench &7- Tag workbench block");
+        p.sendMessage(p() + "&e/company deposit/withdraw <amount> &7- Treasury");
     }
 
     private String p() { return plugin.getConfig().getString("messages.prefix","&8[&6angelCreate&8] &r").replace('&','\u00A7'); }

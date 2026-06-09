@@ -166,7 +166,7 @@ public class ProductCommand implements CommandExecutor {
                 if (products.isEmpty()) { player.sendMessage(p() + "&7No products registered."); return true; }
                 player.sendMessage(p() + "&6--- " + c.getName() + " Products ---");
                 for (Product prod : products) {
-                    player.sendMessage("  &e" + prod.getId().toString().substring(0,8) + " &7| &f" + prod.getDisplayName()
+                    player.sendMessage(p() + "  &e" + prod.getId().toString().substring(0,8) + " &7| &f" + prod.getDisplayName()
                         + " &7| &f" + prod.getBaseItem().name());
                 }
             }
@@ -176,16 +176,16 @@ public class ProductCommand implements CommandExecutor {
                 if (args.length < 2) { player.sendMessage(p() + "&cUsage: /product info <id>"); return true; }
                 Product prod = resolveProduct(player, c, args[1]); if (prod == null) return true;
                 player.sendMessage(p() + "&6--- " + prod.getDisplayName() + " ---");
-                player.sendMessage("  &7Base: &f" + prod.getBaseItem().name());
-                player.sendMessage("  &7Ingredients:");
+                player.sendMessage(p() + "  &7Base: &f" + prod.getBaseItem().name());
+                player.sendMessage(p() + "  &7Ingredients:");
                 for (int i = 0; i < prod.getIngredients().size(); i++) {
                     Ingredient ing = prod.getIngredients().get(i);
-                    player.sendMessage("    &7[" + i + "] &f" + ing.getAmount() + "x " + ing.getMaterial().name());
+                    player.sendMessage(p() + "    &7[" + i + "] &f" + ing.getAmount() + "x " + ing.getMaterial().name());
                 }
-                player.sendMessage("  &7Effects:");
+                player.sendMessage(p() + "  &7Effects:");
                 for (int i = 0; i < prod.getEffects().size(); i++) {
                     EffectModule em = prod.getEffects().get(i);
-                    player.sendMessage("    &7[" + i + "] &e" + em.getTrigger().name() + " &7→ &f" + em.getType().name()
+                    player.sendMessage(p() + "    &7[" + i + "] &e" + em.getTrigger().name() + " &7→ &f" + em.getType().name()
                         + " &8" + em.getParameters());
                 }
             }
@@ -272,14 +272,14 @@ public class ProductCommand implements CommandExecutor {
 
     private void sendHelp(Player p) {
         p.sendMessage(p() + "&6--- Product Help ---");
-        p.sendMessage("&e/product create <name>");
-        p.sendMessage("&e/product setbase <id> <material>");
-        p.sendMessage("&e/product addingredient <id> <material> <amount>");
-        p.sendMessage("&e/product removeingredient <id> <index>");
-        p.sendMessage("&e/product addeffect <id> <trigger> <type> [key=value...]");
-        p.sendMessage("&e/product removeeffect <id> <index>");
-        p.sendMessage("&e/product setlore <id> <line> <text>");
-        p.sendMessage("&e/product list | info <id> | delete <id>");
+        p.sendMessage(p() + "&e/product create <name>");
+        p.sendMessage(p() + "&e/product setbase <id> <material>");
+        p.sendMessage(p() + "&e/product addingredient <id> <material> <amount>");
+        p.sendMessage(p() + "&e/product removeingredient <id> <index>");
+        p.sendMessage(p() + "&e/product addeffect <id> <trigger> <type> [key=value...]");
+        p.sendMessage(p() + "&e/product removeeffect <id> <index>");
+        p.sendMessage(p() + "&e/product setlore <id> <line> <text>");
+        p.sendMessage(p() + "&e/product list | info <id> | delete <id>");
     }
 
     private String p() { return plugin.getConfig().getString("messages.prefix","&8[&6angelCreate&8] &r").replace('&','\u00A7'); }

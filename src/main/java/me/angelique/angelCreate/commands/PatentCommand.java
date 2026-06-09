@@ -70,9 +70,9 @@ public class PatentCommand implements CommandExecutor {
                 } else {
                     Company holder = plugin.getCompanyManager().getCompany(patent.getCompanyId());
                     player.sendMessage(p() + "&6Patent on &f" + prod.getDisplayName());
-                    player.sendMessage("  &7Holder: &e" + (holder != null ? holder.getName() : "Unknown"));
-                    player.sendMessage("  &7Issued: &e" + sdf.format(new Date(patent.getIssuedAt())));
-                    player.sendMessage("  &7Expires: &e" + sdf.format(new Date(patent.getExpiresAt())));
+                    player.sendMessage(p() + "  &7Holder: &e" + (holder != null ? holder.getName() : "Unknown"));
+                    player.sendMessage(p() + "  &7Issued: &e" + sdf.format(new Date(patent.getIssuedAt())));
+                    player.sendMessage(p() + "  &7Expires: &e" + sdf.format(new Date(patent.getExpiresAt())));
                 }
             }
 
@@ -85,7 +85,7 @@ public class PatentCommand implements CommandExecutor {
                 for (Patent patent : patents) {
                     Product prod = plugin.getProductManager().getProduct(patent.getProductId());
                     String prodName = prod != null ? prod.getDisplayName() : patent.getProductId().toString().substring(0,8);
-                    player.sendMessage("  &e" + prodName + " &7expires &f" + sdf.format(new Date(patent.getExpiresAt())));
+                    player.sendMessage(p() + "  &e" + prodName + " &7expires &f" + sdf.format(new Date(patent.getExpiresAt())));
                 }
             }
 
@@ -119,9 +119,9 @@ public class PatentCommand implements CommandExecutor {
 
     private void sendHelp(Player p) {
         p.sendMessage(p() + "&6--- Patent Help ---");
-        p.sendMessage("&e/patent buy <productId> &7- Purchase patent from treasury");
-        p.sendMessage("&e/patent info <productId> &7- Check patent status");
-        p.sendMessage("&e/patent list &7- List your company's patents");
+        p.sendMessage(p() + "&e/patent buy <productId> &7- Purchase patent from treasury");
+        p.sendMessage(p() + "&e/patent info <productId> &7- Check patent status");
+        p.sendMessage(p() + "&e/patent list &7- List your company's patents");
     }
 
     private String p() { return plugin.getConfig().getString("messages.prefix","&8[&6angelCreate&8] &r").replace('&','\u00A7'); }

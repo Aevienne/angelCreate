@@ -174,7 +174,7 @@ public class WorkbenchGUI {
 
         // Ingredient check
         if (!canCraftProduct(selectedProduct)) {
-            player.sendMessage(prefix() + "&cYou are missing ingredients.");
+            player.sendMessage(msg("&cYou are missing ingredients."));
             player.openInventory(buildInventory());
             return;
         }
@@ -196,9 +196,9 @@ public class WorkbenchGUI {
         Map<Integer, ItemStack> leftover = player.getInventory().addItem(result);
         if (!leftover.isEmpty()) {
             leftover.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
-            player.sendMessage(prefix() + "&eInventory full — item dropped at your feet.");
+            player.sendMessage(msg("&eInventory full — item dropped at your feet."));
         } else {
-            player.sendMessage(prefix() + "&aCrafted &6" + selectedProduct.getDisplayName() + "&a!");
+            player.sendMessage(msg("&aCrafted &6" + selectedProduct.getDisplayName() + "&a!"));
         }
 
         player.closeInventory();
@@ -254,5 +254,9 @@ public class WorkbenchGUI {
 
     private String prefix() {
         return plugin.getConfig().getString("messages.prefix", "&8[&6angelCreate&8] &r").replace('&', '\u00A7');
+    }
+
+    private String msg(String message) {
+        return prefix() + message.replace('&', '\u00A7');
     }
 }

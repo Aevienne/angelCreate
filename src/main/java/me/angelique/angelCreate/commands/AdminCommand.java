@@ -91,11 +91,11 @@ public class AdminCommand implements CommandExecutor {
 
     private void sendHelp(CommandSender s) {
         s.sendMessage(p() + "&6--- Admin Help ---");
-        s.sendMessage("&e/ceadmin reload");
-        s.sendMessage("&e/ceadmin give <player> <productId>");
-        s.sendMessage("&e/ceadmin setbalance <company> <amount>");
-        s.sendMessage("&e/ceadmin deletecompany <name>");
-        s.sendMessage("&e/ceadmin expirepatent <productId>");
+        s.sendMessage(p() + "&e/ceadmin reload");
+        s.sendMessage(p() + "&e/ceadmin give <player> <productId>");
+        s.sendMessage(p() + "&e/ceadmin setbalance <company> <amount>");
+        s.sendMessage(p() + "&e/ceadmin deletecompany <name>");
+        s.sendMessage(p() + "&e/ceadmin expirepatent <productId>");
     }
 
     private String p() { return plugin.getConfig().getString("messages.prefix","&8[&6angelCreate&8] &r").replace('&','\u00A7'); }
