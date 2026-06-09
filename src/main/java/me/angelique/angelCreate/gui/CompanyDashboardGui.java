@@ -16,7 +16,7 @@ import java.util.*;
 
 public final class CompanyDashboardGui {
 
-    public static final String TITLE_PREFIX = TextUtil.color("&8Company \u2014 ");
+    public static final String TITLE_PREFIX = TextUtil.color("&6");
     static final int SIZE = 45;
 
     private CompanyDashboardGui() {}
@@ -31,7 +31,7 @@ public final class CompanyDashboardGui {
     }
 
     private static void openNoCompany(Player player, AngelCreate plugin) {
-        Inventory inv = Bukkit.createInventory(null, SIZE, TextUtil.color("&8Company \u2014 &cNo Company"));
+        Inventory inv = Bukkit.createInventory(null, SIZE, TextUtil.color("&cNo Company"));
         fillBorder(inv);
 
         inv.setItem(13, item(Material.BARRIER, "&cYou are not in a company",

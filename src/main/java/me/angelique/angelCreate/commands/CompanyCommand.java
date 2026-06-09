@@ -162,7 +162,7 @@ public class CompanyCommand implements CommandExecutor {
                 player.sendMessage(p("&7IPO Listed: &e" + c.isIpoListed()));
                 for (Map.Entry<UUID, Role> entry : c.getMembers().entrySet()) {
                     OfflinePlayer m = plugin.getServer().getOfflinePlayer(entry.getKey());
-                    player.sendMessage(p("  &7" + (m.getName() != null ? m.getName() : entry.getKey()) + " &8\u2014 &e" + entry.getValue().name()));
+                    player.sendMessage(p("  &7" + (m.getName() != null ? m.getName() : entry.getKey()) + " &8: &e" + entry.getValue().name()));
                 }
             }
 
