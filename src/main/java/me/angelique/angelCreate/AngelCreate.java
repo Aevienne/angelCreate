@@ -8,6 +8,8 @@ import me.angelique.angelCreate.commands.PatentCommand;
 import me.angelique.angelCreate.commands.ProductCommand;
 import me.angelique.angelCreate.factory.FactoryListener;
 import me.angelique.angelCreate.factory.FactoryManager;
+import me.angelique.angelCreate.gui.CompanyDashboardGui;
+import me.angelique.angelCreate.gui.CompanyDashboardListener;
 import me.angelique.angelCreate.gui.ProductSelectGUI;
 import me.angelique.angelCreate.gui.WorkbenchGUI;
 import me.angelique.angelCreate.hooks.CaravanHook;
@@ -75,6 +77,7 @@ public class AngelCreate extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new EffectTriggerListener(this), this);
         getServer().getPluginManager().registerEvents(new ItemInteractListener(this), this);
         getServer().getPluginManager().registerEvents(new FactoryListener(this), this);
+        getServer().getPluginManager().registerEvents(new CompanyDashboardListener(this), this);
         getServer().getPluginManager().registerEvents(caravanHook, this);
         if (getServer().getPluginManager().getPlugin("AngelNCore") != null) {
             getServer().getPluginManager().registerEvents(new SeasonProductionListener(), this);
