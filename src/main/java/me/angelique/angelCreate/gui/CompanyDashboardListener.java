@@ -18,10 +18,7 @@ public class CompanyDashboardListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
         String title = event.getView().getTitle();
-        // Match any title starting with the company title prefix
-        if (!title.startsWith(CompanyDashboardGui.TITLE_PREFIX.replace("\u00A7", "§"))) return;
-        if (title.contains("No Company")) return; // handled by create button
-
+        if (!title.startsWith("§6Company:")) return;
         event.setCancelled(true);
 
         switch (event.getSlot()) {
