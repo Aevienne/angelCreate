@@ -83,6 +83,15 @@ public class CompanyCommand implements CommandExecutor {
                 EventBus.publish(new CompanyIPOEvent(c.getId().toString(), c.getName(), 1000 * c.getLevel(), Math.max(1.0, c.getTreasury() / Math.max(1, 1000 * c.getLevel()))));
             }
 
+            case "unipo" -> {
+                Company c = requireCompany(player); if (c == null) return true;
+                if (!c.getOwner().equals(player.getUniqueId())) { noPerms(player); return true; }
+                if (!c.isIpoListed()) { player.sendMessage(p() + "&eYour company is not IPO listed."); return true; }
+                c.setIpoListed(false);
+                plugin.getCompanyManager().save();
+                player.sendMessage(p() + "&aCompany &6" + c.getName() + " &adelisted from the stock exchange.");
+            }
+
             case "invite" -> {
                 Company c = requireCompany(player); if (c == null) return true;
                 if (!c.hasRole(player.getUniqueId(), Role.MANAGER)) { noPerms(player); return true; }
@@ -233,6 +242,7 @@ public class CompanyCommand implements CommandExecutor {
         p.sendMessage(p() + "&6--- Company Help ---");
         p.sendMessage("&e/company create <name> &7- Register a company");
         p.sendMessage("&e/company ipo &7- List company on stock exchange");
+        p.sendMessage("&e/company unipo &7- Delist from stock exchange");
         p.sendMessage("&e/company invite <player> &7- Invite member");
         p.sendMessage("&e/company kick <player> &7- Remove member");
         p.sendMessage("&e/company promote/demote <player> &7- Change role");
